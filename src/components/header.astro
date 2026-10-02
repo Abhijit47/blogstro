@@ -1,0 +1,51 @@
+---
+import { Toggle } from 'astro-theme-toggle/components';
+import { MoonIcon, SunIcon } from 'lucide-react';
+
+import MobileNav from './mobile-nav';
+import { buttonVariants } from './ui/button';
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<header
+  class='bg-gray-950 text-white py-4 px-4 sticky top-0 z-50 border-b border-white'>
+  <div class='flex items-center justify-between'>
+    <div>
+      {name}
+    </div>
+
+    <nav>
+      <ul class='hidden md:flex items-center gap-4'>
+        <li>
+          <a href='/'>Home</a>
+        </li>
+        <li>
+          <a href='/about'>About</a>
+        </li>
+        <li>
+          <a href='/contact'>Contact</a>
+        </li>
+        <li>
+          <a href='/blogs'>Blogs</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class='flex items-center gap-2'>
+      <Toggle class={buttonVariants({ size: 'icon-sm', className: 'p-1.5' })}>
+        <Fragment slot='icon-light'>
+          <SunIcon />
+        </Fragment>
+        <Fragment slot='icon-dark'>
+          <MoonIcon />
+        </Fragment>
+      </Toggle>
+      <MobileNav client:idle={{ timeout: 1000 }} />
+    </div>
+  </div>
+</header>

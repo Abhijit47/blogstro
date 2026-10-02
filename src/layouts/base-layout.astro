@@ -1,0 +1,75 @@
+---
+import '../styles/global.css';
+
+import { ClientRouter } from 'astro:transitions';
+
+import LoadingIndicator from 'astro-loading-indicator/component';
+import { Schema } from 'astro-seo-schema';
+import { ThemeScript } from 'astro-theme-toggle/components';
+
+import { TooltipProvider } from '#components/ui/tooltip';
+import Footer from '../components/footer.astro';
+import Header from '../components/header.astro';
+import { JSONLDInfo } from '../constants';
+
+interface Props {
+  name: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  classNames?: string;
+}
+
+const { name, title, description, keywords, classNames } = Astro.props;
+---
+
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <link rel='icon' href='/favicon.ico' />
+    <meta name='viewport' content='width=device-width' />
+    <meta name='generator' content={Astro.generator} />
+    <title>{title}</title>
+    <meta name='description' content={description} />
+    <meta property='og:title' content={title} />
+    <meta property='og:description' content={description} />
+    <meta name='keywords' content={keywords.join(',')} />
+
+    <link
+      rel='alternate'
+      type='application/rss+xml'
+      title={`${title} RSS Feed`}
+      href={new URL('rss.xml', Astro.site)}
+    />
+
+    <link rel='sitemap' href='/sitemap-index.xml' />
+
+    <ClientRouter />
+
+    <LoadingIndicator color='var(--primary)' animationDuration={500} />
+
+    <ThemeScript />
+
+    <Schema item={JSONLDInfo} space={2} />
+  </head>
+  <body class='relative'>
+    <Header name={name} />
+
+    <main
+      class:list={[
+        'min-h-[calc(100lvh-8rem)] h-full w-full',
+        'space-y-8',
+        'max-w-(--breakpoint-xl) mx-auto px-4',
+        'py-12',
+        classNames,
+      ]}>
+      <TooltipProvider>
+        <!-- your content is injected here -->
+        {(<slot />)}
+      </TooltipProvider>
+    </main>
+
+    <Footer title={title} />
+  </body>
+</html>

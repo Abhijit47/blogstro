@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import { siteMetadata } from '../../constants';
+import BaseLayout from '../../layouts/base-layout.astro';
+
+import { buttonVariants } from '#components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '#components/ui/card';
+import type { CollectionEntry } from 'astro:content';
+interface Props {
+  posts: CollectionEntry<'blogs'>[];
+}
+
+// Get all entries from a collection.
+// Requires the name of the collection as an argument.
+const allBlogPosts = await getCollection('blogs');
+
+const posts = (await getCollection('blogs')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<BaseLayout
+  name={siteMetadata.name}
+  title={siteMetadata.title}
+  description={siteMetadata.description}
+  keywords={siteMetadata.keywords}
+  classNames='space-y-6'>
+  <h1 class='text-3xl font-semibold'>My Blogs</h1>
+  <section>
+    <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+      {
+        posts.map((post) => (
+          <Card className='mb-8'>
+            <CardHeader>
+              <CardTitle>
+                <h2 class='text-2xl font-bold mb-2'>
+                  <a href={`/blogs/${post.data.title}`}>{post.data.title}</a>
+                </h2>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                <p class='text-gray-600 mb-2'>{post.data.description}</p>
+              </CardDescription>
+            </CardContent>
+
+            <CardFooter className='justify-between'>
+              <p class='text-gray-500 text-sm'>
+                Published on {post.data.pubDate.toLocaleDateString()}
+              </p>
+
+              <a
+                href={`/blogs/${post.data.slug}`}
+                class={buttonVariants({ variant: 'link' })}>
+                Read More
+              </a>
+            </CardFooter>
+          </Card>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

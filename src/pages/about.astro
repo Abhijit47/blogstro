@@ -1,0 +1,19 @@
+---
+// import { fade } from 'astro:transitions';
+import { siteMetadata } from '../constants';
+import BaseLayout from '../layouts/base-layout.astro';
+---
+
+<BaseLayout
+  name={siteMetadata.name}
+  title={siteMetadata.title}
+  description={siteMetadata.description}
+  keywords={siteMetadata.keywords}>
+  <section>
+    <h1>About page</h1>
+    <p>
+      This is the about page of the Astro project. Here you can find information
+      about the project, its goals, and the team behind it.
+    </p>
+  </section>
+</BaseLayout>

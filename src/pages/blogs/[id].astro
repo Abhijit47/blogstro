@@ -1,0 +1,54 @@
+---
+// export function getStaticPaths() {
+//   return [
+//     { params: { id: '1' } },
+//     { params: { id: '2' } },
+//     { params: { id: '3' } },
+//   ];
+// }
+
+// const { id } = Astro.params;
+
+// export const prerender = false; // Not needed in 'server' mode
+
+// const { resource, id } = Astro.params;
+
+import { getCollection, render } from 'astro:content';
+import { siteMetadata } from '../../constants';
+import BaseLayout from '../../layouts/base-layout.astro';
+
+import BasicLike from '#components/basic-like';
+import { slide } from 'astro:transitions';
+import Prose from '../../components/prose.astro';
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const posts = await getCollection('blogs');
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+// 2. For your template, you can get the entry directly from the prop
+const { post } = Astro.props;
+const { id } = Astro.params;
+const { Content } = await render(post);
+---
+
+<BaseLayout
+  name={siteMetadata.name}
+  title={siteMetadata.title}
+  description={siteMetadata.description}
+  keywords={siteMetadata.keywords}>
+  <section transition:animate={slide({ duration: '0.4s' })}>
+    <h1>Blog page #{id}</h1>
+    <p>
+      This is the blog page for blog post with ID: {id}. Here you can find the
+      content of the blog post, including text, images, and other media.
+    </p>
+    <Prose>
+      <Content />
+    </Prose>
+    <BasicLike client:visible />
+  </section>
+</BaseLayout>
