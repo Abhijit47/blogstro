@@ -1,6 +1,6 @@
+import { siteMetadata } from '#/constants';
 import { Menu, XCircleIcon } from 'lucide-react';
 import { useState } from 'react';
-import { siteMetadata } from '../constants';
 import { Button, buttonVariants } from './ui/button';
 import { Separator } from './ui/separator';
 import {

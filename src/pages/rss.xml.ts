@@ -2,7 +2,7 @@ import rss, { pagesGlobToRssItems } from '@astrojs/rss';
 import type { APIContext } from 'astro';
 import { PUBLIC_BASE_URL } from 'astro:env/client';
 
-import { siteMetadata } from '../constants';
+import { siteMetadata } from '#/constants';
 
 export async function GET(context: APIContext) {
   return rss({

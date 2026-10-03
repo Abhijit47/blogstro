@@ -7,10 +7,11 @@ import LoadingIndicator from 'astro-loading-indicator/component';
 import { Schema } from 'astro-seo-schema';
 import { ThemeScript } from 'astro-theme-toggle/components';
 
-import { TooltipProvider } from '#components/ui/tooltip';
-import Footer from '../components/footer.astro';
-import Header from '../components/header.astro';
-import { JSONLDInfo } from '../constants';
+import Footer from '#/components/footer.astro';
+import Header from '#/components/header.astro';
+import { TooltipProvider } from '#/components/ui/tooltip';
+import { JSONLDInfo } from '#/constants';
+import { Toaster } from '#components/ui/sonner';
 
 interface Props {
   name: string;
@@ -71,5 +72,6 @@ const { name, title, description, keywords, classNames } = Astro.props;
     </main>
 
     <Footer title={title} />
+    <Toaster client:load closeButton richColors position='top-center' />
   </body>
 </html>

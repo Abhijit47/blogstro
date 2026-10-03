@@ -1,7 +1,9 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
-import { siteMetadata } from '../../constants';
-import BaseLayout from '../../layouts/base-layout.astro';
+
+import { siteMetadata } from '#/constants';
+import BaseLayout from '#/layouts/base-layout.astro';
 
 import { buttonVariants } from '#components/ui/button';
 import {
@@ -12,7 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from '#components/ui/card';
-import type { CollectionEntry } from 'astro:content';
 interface Props {
   posts: CollectionEntry<'blogs'>[];
 }
@@ -21,7 +22,10 @@ interface Props {
 // Requires the name of the collection as an argument.
 const allBlogPosts = await getCollection('blogs');
 
-const posts = (await getCollection('blogs')).sort(
+// const posts = (await getCollection('blogs')).sort(
+//   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+// );
+const posts = allBlogPosts.sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---

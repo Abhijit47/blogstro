@@ -34,6 +34,11 @@ export default defineConfig({
     },
   },
 
+  experimental: {
+    contentIntellisense: true,
+    collectionStorage: 'chunked',
+  },
+
   site: PUBLIC_BASE_URL,
 
   vite: {
