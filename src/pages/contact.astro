@@ -28,6 +28,8 @@ import {
 //     }
 //   }
 // }
+
+const data = Astro.cookies.get('myCookie');
 ---
 
 <BaseLayout
@@ -79,6 +81,10 @@ import {
           </p>
         </CardDescription>
       </CardHeader>
+
+      <p>
+        Cookie: {data?.value || 'No cookie found'}
+      </p>
 
       <CardContent>
         <ContactForm client:load />
