@@ -1,19 +1,16 @@
 // @ts-check
-import { defineConfig, envField } from 'astro/config';
-
-import tailwindcss from '@tailwindcss/vite';
-
 import mdx from '@astrojs/mdx';
-
+import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
-
 import sitemap, { ChangeFreqEnum } from '@astrojs/sitemap';
-
-import { loadEnv } from 'vite';
-
 import vercel from '@astrojs/vercel';
-
+import toolbarRoutes from '@shiftescape/astro-toolbar-routes';
+import tailwindcss from '@tailwindcss/vite';
 import compressor from 'astro-compressor';
+import contentViewer from 'astro-content-viewer';
+import typesafeRoutes from 'astro-typesafe-routes';
+import { defineConfig, envField } from 'astro/config';
+import { loadEnv } from 'vite';
 
 const { PUBLIC_BASE_URL } = loadEnv(
   process.env.PUBLIC_BASE_URL,
@@ -83,6 +80,15 @@ export default defineConfig({
       filter: (page) => page !== `${PUBLIC_BASE_URL}/contact`,
     }),
     compressor(),
+    partytown(),
+    contentViewer(),
+    toolbarRoutes({
+      // hide specific routes or glob prefixes
+      exclude: ['/admin', '/api/*'],
+      // show _astro/* and _server_islands/* internal routes
+      showInternalRoutes: false,
+    }),
+    typesafeRoutes(),
   ],
 
   adapter: vercel(),
