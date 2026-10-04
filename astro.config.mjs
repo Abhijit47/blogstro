@@ -4,6 +4,7 @@ import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
 import sitemap, { ChangeFreqEnum } from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
+import imageInspector from '@lexingtonthemes/astro-image-inspector';
 import toolbarRoutes from '@shiftescape/astro-toolbar-routes';
 import tailwindcss from '@tailwindcss/vite';
 import compressor from 'astro-compressor';
@@ -56,7 +57,16 @@ export default defineConfig({
   },
 
   integrations: [
-    mdx(),
+    mdx({
+      optimize: true,
+      syntaxHighlight: 'shiki',
+      shikiConfig: {
+        themes: {
+          light: 'github-dark',
+          dark: 'github-light',
+        },
+      },
+    }),
     react({ compiler: { compilationMode: 'annotation' } }),
     sitemap({
       chunks: {
@@ -82,6 +92,7 @@ export default defineConfig({
     compressor(),
     partytown(),
     contentViewer(),
+    imageInspector({ enabled: true, appName: 'Blogstro' }),
     toolbarRoutes({
       // hide specific routes or glob prefixes
       exclude: ['/admin', '/api/*'],
