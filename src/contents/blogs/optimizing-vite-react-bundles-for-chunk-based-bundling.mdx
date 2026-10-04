@@ -1,0 +1,111 @@
+---
+title: 'Optimizing Vite + React Bundles for Chunk-Based Bundling'
+slug: 'optimizing-vite-react-bundles'
+description: 'A comprehensive guide on optimizing production bundles in Vite with React using chunk-based bundling techniques.'
+cover: '/post-covers/optimizing-vite-react-bundles.jpg'
+coverAlt: 'Illustration of Vite and React logos with a bundle optimization concept'
+tags: ['Vite', 'React', 'Bundle Optimization', 'Web Development']
+keywords:
+  ['Vite', 'React', 'Bundle Optimization', 'Chunking', 'Web Performance']
+pubDate: '2026-09-25'
+updatedDate: '2026-09-25'
+draft: false
+---
+
+# Optimizing Vite + React Bundles for Chunk-Based Bundling
+
+<img
+  src={frontmatter.cover}
+  alt={frontmatter.coverAlt}
+  class='w-full h-auto'
+  fetchpriority='high'
+  decoding='async'
+  loading='lazy'
+/>
+
+In the world of modern web development, optimizing your application's bundle size is crucial for performance and user experience. This tutorial will guide you through the process of optimizing a Vite + React bundle using chunk-based bundling techniques. By the end of this article, you'll understand how to configure your `vite.config.ts` or `vite.config.js` file to achieve a more efficient production build.
+
+## Understanding Bundle Optimization
+
+When developing applications with Vite and React, you may encounter issues with large bundle sizes, especially as your application grows. A larger bundle can lead to slower load times and a poor user experience. Optimizing your bundle involves breaking it into smaller, manageable chunks that can be loaded on demand, improving performance.
+
+### What is Chunk-Based Bundling?
+
+Chunk-based bundling is a technique that allows you to split your application into smaller pieces (chunks) that can be loaded independently. This means that instead of loading the entire application at once, users can load only the parts they need, reducing initial load times and improving overall performance.
+
+## Configuring Vite for Chunk-Based Bundling
+
+To implement chunk-based bundling in your Vite + React application, you'll need to modify your `vite.config.ts` or `vite.config.js` file. Here’s how to do it:
+
+### Step 1: Update Your Vite Configuration
+
+Add the following configuration to your `vite.config.ts` or `vite.config.js` file:
+
+```typescript
+build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            const modulePath = id.split('node_modules/')[1];
+            const topLevelFolder = modulePath.split('/')[0];
+            if (topLevelFolder !== '.pnpm') {
+              return topLevelFolder;
+            }
+            const scopedPackageName = modulePath.split('/')[1];
+            const chunkName =
+              scopedPackageName.split('@')[
+                scopedPackageName.startsWith('@') ? 1 : 0
+              ];
+            return chunkName;
+          }
+        },
+      },
+    },
+  },
+```
+
+### Explanation of the Configuration
+
+- **manualChunks**: This function allows you to define how to split your code into chunks. In this example, we check if the module is from `node_modules` and then create chunks based on the top-level folder or scoped package name.
+- **Performance Improvement**: By chunking your dependencies, you can significantly reduce the size of your main bundle, leading to faster load times.
+
+### Step 2: Build Your Application
+
+After updating your configuration, run the build command:
+
+```bash
+pnpm run build
+```
+
+### Step 3: Analyze the Results
+
+Compare the output of your build before and after applying the optimizations. Here’s an example of the output you might see:
+
+#### Before Optimization
+
+```bash
+dist/index.html                                    0.58 kB │ gzip:   0.33 kB
+dist/assets/index-Dgpxupnc.js                  1,183.24 kB │ gzip: 302.23 kB
+```
+
+#### After Optimization
+
+```bash
+dist/index.html                                       2.51 kB │ gzip:   0.72 kB
+dist/assets/index-DQphmtwL.css                      938.76 kB │ gzip: 148.81 kB
+```
+
+As you can see, the optimized build results in smaller chunk sizes, which can lead to improved performance.
+
+## Conclusion
+
+By implementing chunk-based bundling in your Vite + React application, you can significantly reduce the size of your production bundle. This not only enhances the user experience but also improves the overall performance of your application.
+
+For further reading on optimizing chunking, refer to the official Rollup documentation on [manualChunks](https://rollupjs.org/configuration-options/#output-manualchunks).
+
+## Resources
+
+- [Vite Documentation](https://vitejs.dev/)
+- [Rollup Documentation](https://rollupjs.org/)
+- [Chunking in Rollup](https://rollupjs.org/configuration-options/#output-manualchunks)

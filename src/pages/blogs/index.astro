@@ -4,7 +4,6 @@ import { getCollection } from 'astro:content';
 
 import { siteMetadata } from '#/constants';
 import BaseLayout from '#/layouts/base-layout.astro';
-
 import { buttonVariants } from '#components/ui/button';
 import {
   Card,
@@ -14,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from '#components/ui/card';
+
 interface Props {
   posts: CollectionEntry<'blogs'>[];
 }
@@ -28,6 +28,30 @@ const allBlogPosts = await getCollection('blogs');
 const posts = allBlogPosts.sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+// async function getOptimizedImg(slug: string) {
+//   const post = posts.find((p) => p.data.slug === slug);
+//   if (!post) {
+//     throw new Error(`Post with slug "${slug}" not found.`);
+//   }
+
+//   const originalImage = post.data.cover;
+//   const optimizedImage = await getImage({ src: originalImage, width: 1280 });
+//   return optimizedImage;
+// }
+
+// const finalPosts = await Promise.all(
+//   posts.map(async (post) => {
+//     const optimizedImage = await getOptimizedImg(post.data.slug);
+//     return {
+//       ...post,
+//       data: {
+//         ...post.data,
+//         cover: optimizedImage.src,
+//       },
+//     };
+//   }),
+// );
 ---
 
 <BaseLayout
@@ -42,10 +66,21 @@ const posts = allBlogPosts.sort(
       {
         posts.map((post) => (
           <Card className='mb-8'>
+            <CardContent>
+              <img
+                src={`${post.data.cover}`}
+                alt={post.data.coverAlt}
+                width={400}
+                height={200}
+                decoding='async'
+                loading='lazy'
+                fetchpriority='auto'
+              />
+            </CardContent>
             <CardHeader>
               <CardTitle>
                 <h2 class='text-2xl font-bold mb-2'>
-                  <a href={`/blogs/${post.data.title}`}>{post.data.title}</a>
+                  <a href={`/blogs/${post.data.slug}`}>{post.data.title}</a>
                 </h2>
               </CardTitle>
             </CardHeader>

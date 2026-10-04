@@ -13,9 +13,14 @@ const blogs = defineCollection({
   schema: z.object({
     title: z.string(),
     slug: z.string(),
+    cover: z.string(),
+    coverAlt: z.string(),
+    tags: z.array(z.string()),
+    keywords: z.array(z.string()),
     description: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
+    draft: z.boolean().default(false),
   }),
 });
 
